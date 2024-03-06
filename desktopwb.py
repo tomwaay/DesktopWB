@@ -17,7 +17,9 @@ running = True
 colourWHITE = pygame.Color(255,255,255)
 colourBLACK = pygame.Color(0,0,0)
 
-
+#TODO
+#BACK UP PREVIOUS WALLPAPER 
+#SET DESKTOP BACKGROUND ON CTRL+S ACTION
 try:
     bg = pygame.image.load('dtwb_background.jpg').convert()
     screen.blit(bg, (0,0))
@@ -29,14 +31,6 @@ except:
 else:
     pygame.image.save(screen, 'dtwb_background.jpg')
     
-  
-#TRY LOADING wallpaper.png FROM SOURCE (PREVIOUS DESKTOPWB SESSION)
-#IF ERR, CREATE BLANK WALLPAPER AND BACKUP CURRENT WALLPAPERS
-
-
-
-#update to open canvas the size of the monitor
-
 
 while running:
     # poll for events
@@ -59,13 +53,6 @@ while running:
                 pygame.image.save(screen, 'dtwb_background.jpg')
                 #update wallpaper
                 running = False
-
-
-    # fill the screen with a color to wipe away anything from last frame
-    #screen.fill("purple")
-
-    # RENDER YOUR GAME HERE
-
 
 
     # flip() the display to put your work on screen
