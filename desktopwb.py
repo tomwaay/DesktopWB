@@ -2,24 +2,40 @@ import pygame
 import pygame.locals
 from screeninfo import get_monitors
 
+# pygame setup
+pygame.init()
+
 #GET SCREEN SIZE
 screenX = get_monitors()[0].width
 screenY = get_monitors()[0].height
 
-#TRY LOADING wallpaper.png FROM SOURCE (PREVIOUS DESKTOPWB SESSION)
-#IF ERR, CREATE BLANK WALLPAPER AND BACKUP CURRENT WALLPAPERS
-
-
-# pygame setup
-pygame.init()
-#update to open canvas the size of the monitor
-screen = pygame.display.set_mode((screenX, screenY-50))
+#vars and depends
+screen = pygame.display.set_mode((screenX, screenY))
 clock = pygame.time.Clock()
 running = True
 
 colourWHITE = pygame.Color(255,255,255)
 colourBLACK = pygame.Color(0,0,0)
 
+
+try:
+    bg = pygame.image.load('dtwb_background.jpg').convert()
+    screen.blit(bg, (0,0))
+    print("background found.")
+except:
+    print("No background. Creating one.")
+    screen.fill(colourWHITE)
+    pygame.image.save(screen, 'dtwb_background.jpg')
+else:
+    pygame.image.save(screen, 'dtwb_background.jpg')
+    
+  
+#TRY LOADING wallpaper.png FROM SOURCE (PREVIOUS DESKTOPWB SESSION)
+#IF ERR, CREATE BLANK WALLPAPER AND BACKUP CURRENT WALLPAPERS
+
+
+
+#update to open canvas the size of the monitor
 
 
 while running:
@@ -30,7 +46,7 @@ while running:
             running = False
         #DRAWING
         elif pygame.mouse.get_pressed()[0]:
-            pygame.draw.circle(screen, pygame.Color(255,255,255), pygame.mouse.get_pos(), 5)
+            pygame.draw.circle(screen, colourBLACK, pygame.mouse.get_pos(), 5)
 
         #CHECKING FOR KEYPRESS
         elif event.type == pygame.KEYDOWN:
@@ -40,6 +56,7 @@ while running:
             #CTRL + s to save and exit
             elif event.key == pygame.K_s and pygame.key.get_mods() & pygame.KMOD_CTRL:
                 print("Exiting and saving")
+                pygame.image.save(screen, 'dtwb_background.jpg')
                 #update wallpaper
                 running = False
 
@@ -53,8 +70,6 @@ while running:
 
     # flip() the display to put your work on screen
     pygame.display.flip()
-
     clock.tick(60)  # limits FPS to 60
-
 pygame.quit()
 
