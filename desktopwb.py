@@ -1,5 +1,7 @@
 import pygame
 import pygame.locals
+import struct
+import ctypes
 from screeninfo import get_monitors
 
 # pygame setup
@@ -13,9 +15,26 @@ screenY = get_monitors()[0].height
 screen = pygame.display.set_mode((screenX, screenY))
 clock = pygame.time.Clock()
 running = True
+SPI_SETDESKWALLPAPER = 20
 
 colourWHITE = pygame.Color(255,255,255)
 colourBLACK = pygame.Color(0,0,0)
+
+PATH = "C:\DesktopWB\dtwb_background.jpg"
+
+def is_64bit_windows():
+    """Check if 64 bit Windows OS"""
+    return struct.calcsize('P') * 8 == 64
+
+def changeBG():
+    """Change background depending on bit size"""
+    if is_64bit_windows():
+        ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, PATH, 3)
+    else:
+        ctypes.windll.user32.SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, PATH, 3)
+
+
+
 
 #TODO
 #BACK UP PREVIOUS WALLPAPER 
@@ -52,11 +71,12 @@ while running:
                 print("Exiting and saving")
                 pygame.image.save(screen, 'dtwb_background.jpg')
                 #update wallpaper
+                changeBG()
                 running = False
 
 
     # flip() the display to put your work on screen
     pygame.display.flip()
-    clock.tick(60)  # limits FPS to 60
+    clock.tick(600)  # limits FPS to 60
 pygame.quit()
 
