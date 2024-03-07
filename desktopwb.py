@@ -3,6 +3,7 @@ import pygame.locals
 import struct
 import ctypes
 from screeninfo import get_monitors
+from pygame.locals import *
 
 # pygame setup
 pygame.init()
@@ -12,7 +13,8 @@ screenX = get_monitors()[0].width
 screenY = get_monitors()[0].height
 
 #vars and depends
-screen = pygame.display.set_mode((screenX, screenY))
+flags = FULLSCREEN | DOUBLEBUF
+screen = pygame.display.set_mode((screenX, screenY),flags,16)
 clock = pygame.time.Clock()
 running = True
 SPI_SETDESKWALLPAPER = 20
@@ -33,12 +35,15 @@ def changeBG():
     else:
         ctypes.windll.user32.SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, PATH, 3)
 
-
-
-
 #TODO
 #BACK UP PREVIOUS WALLPAPER 
-#SET DESKTOP BACKGROUND ON CTRL+S ACTION
+#Make drawing better & consistent movements
+#add eraser
+#different sizes?
+#tool palette?
+
+#Try to environment variable for easy cli launch? or create exe?
+
 try:
     bg = pygame.image.load('dtwb_background.jpg').convert()
     screen.blit(bg, (0,0))
@@ -50,6 +55,7 @@ except:
 else:
     pygame.image.save(screen, 'dtwb_background.jpg')
     
+pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP])
 
 while running:
     # poll for events
@@ -59,6 +65,8 @@ while running:
             running = False
         #DRAWING
         elif pygame.mouse.get_pressed()[0]:
+            pygame.draw.circle(screen, colourBLACK, pygame.mouse.get_pos(), 5)
+            pygame.draw.circle(screen, colourBLACK, pygame.mouse.get_pos(), 5)
             pygame.draw.circle(screen, colourBLACK, pygame.mouse.get_pos(), 5)
 
         #CHECKING FOR KEYPRESS
@@ -70,7 +78,6 @@ while running:
             elif event.key == pygame.K_s and pygame.key.get_mods() & pygame.KMOD_CTRL:
                 print("Exiting and saving")
                 pygame.image.save(screen, 'dtwb_background.jpg')
-                #update wallpaper
                 changeBG()
                 running = False
 
